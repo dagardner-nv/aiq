@@ -129,6 +129,25 @@ services:
       retries: 5
     restart: unless-stopped
 
+  vllm:
+    image: aiq-bp-vllm:0.15.1
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./vllm_cache:/workspace/.cache
+    ports:
+      - 127.0.0.1:8080:8080
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+              count: all
+
+
 volumes:
   aiq-data:
     driver: local
